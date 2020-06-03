@@ -9,7 +9,7 @@ seperated by space and/or new line.
 The SQL file is in its own directory but will show it below.
 
 
-'''
+```
 -- Database Setup:
 ----------------------------------------------------------
 -- Table structure for table `wordsearch`
@@ -29,4 +29,4 @@ etc.. etc.. etc..
 ALTER TABLE `wordsearch`
 ADD PRIMARY KEY (`word`);
 COMMIT;
-'''
+```
