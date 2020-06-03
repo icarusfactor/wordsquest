@@ -8,8 +8,6 @@ All the words picked to place into the database will need to be
 seperated by space and/or new line.
 The SQL file is in its own director,y but will show it below.
 
-
->
 > -- Database Setup:
 > ----------------------------------------------------------
 > -- Table structure for table `wordsearch`
