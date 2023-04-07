@@ -17,14 +17,21 @@ jQuery( document ).ready(function() {
      if(response=="true"){
                        //alert('success'); 
         jQuery("#display_rec").html("<div style='color: green;' class='success'><p>SAVED</p></div>")
+
+                    }else if(response=="false"){
+
+        jQuery("#display_rec").html("<div style='color: red' class='fail'>PLEASE INPUT ALL REQUIRED FILEDS.</div>")
                     }else{
-                        jQuery("#display_rec").html("<div style='color: red' class='fail'>PLEASE INPUT ALL REQUIRED FILEDS.</div>")
+        jQuery("#display_rec").html("<div style='color: blue' class='sucess'>SENT</div>")
                         //alert('Please input required fields.'); 
                     } 
                 }
    });
   }); 
+
+  });
+
+
     });
-});
 
 

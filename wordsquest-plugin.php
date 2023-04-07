@@ -8,7 +8,7 @@
  Plugin Name: Words Quest Plugin
  Plugin URI: http://userspace.org
  Description: Words Quest is a basic HTML5/CSS3 Word Search program.
- Version: 1.0.0
+ Version: 1.1.0
  Author: Daniel Yount
  Author URI: http://userspace.org
  License: GPLv3 or later
@@ -49,9 +49,11 @@ if(!class_exists('WordsQuestPlugin')) {
             
             /* notice green_do_something appended to action name of wp_ajax_ */
             add_action('admin_enqueue_scripts', array($this, 'wq_enqueue'));
-            add_action(modal_survey_action_admin_email, array(&$this, 'wq_adminemail'));
-            add_action(modal_survey_action_participants_create, array(&$this, 'wq_usercreate'));
-            add_action(modal_survey_action_participants_update, array(&$this, 'wq_userupdate'));
+
+            #For debug info 
+            #add_action(modal_survey_action_admin_email, array(&$this, 'wq_adminemail'));
+            #add_action(modal_survey_action_participants_create, array(&$this, 'wq_usercreate'));
+            #add_action(modal_survey_action_participants_update, array(&$this, 'wq_userupdate'));
         }
 
         public function settings_link($links) {
@@ -88,6 +90,29 @@ if(!class_exists('WordsQuestPlugin')) {
             WordsQuestPluginActivate::activate();
         }
 
+
+        /*Idea behind this function is to pull words from DB list and echo them back to the browswer so it will be used to fill element_1 */
+        public function pull_words() {
+            global $wpdb;
+	    $words_array=[];
+	    $row="";
+            $cnt = 0;
+            $madeit = "";
+            //  Insert words into database.
+            error_log("pull_data:pull words");
+            $rqpullword = "SELECT * FROM `wq_wordsearch` WHERE 1;";
+            foreach( $wpdb->get_results( $rqpullword ) as $key => $row) {
+                if(!empty($row->word)) { 
+                                     $words_array[$cnt] = $row->word;
+                                     $madeit = $madeit . "\n" . strval($words_array[$cnt]);
+                                     /* Log getting words from db  */ 
+                                     //error_log("pull_data:" . strval($row->word) .":count:" . strval($cnt).":");
+                                       }
+                $cnt=$cnt+1;
+            	} 
+            return $madeit;
+        }
+
         public function push_words($words) {
             global $wpdb;
             //decode to make a PHP array.                   
@@ -104,7 +129,7 @@ if(!class_exists('WordsQuestPlugin')) {
                 $rqpushword = "INSERT INTO `wq_wordsearch` ( `word`  ) VALUES ( '" . $words_array[$cnt] . "' );";
                 $wpdb->query($rqpushword);
                 if($cnt ++ == $max_loop_iterations) {
-                    error_log("push_data:max_loop_iterations: Too many iterations...");
+                    //error_log("push_data:max_loop_iterations: Too many iterations...");
                     break;
                 }
             }
@@ -114,22 +139,21 @@ if(!class_exists('WordsQuestPlugin')) {
         function wq_do_something_serverside() {
             //Use this value to validate each data set is only for this plugin.
             $unique_value = $_POST['if_ajaxid'];
+
             if($unique_value == '006') {
                 // Convert output to ajax call      
                 $d1 = $_POST['element_1'];
+                 
                 //Check if  URL data query is empty , if so send false
-                if($d1 == '') {
+                if( empty($this->push_words($d1)) or $d1 == ''  ) {
                     echo "false";
+                    error_log("push_data:element_1:empty");
+                    die();
                 } else {
                     //enter words into DB. 
                     $words_array = $this->push_words($d1);
-                    $d1conv = urlencode($d1);
-                    $wqObj->words = $d1conv;
-                    //Need to convert all configs to json and save in variable        
-                    $wqJSON = json_encode($wqObj);
-                    //Will be saved to database options. 
-                    update_option('wordsquest_configs', $wqJSON);
                     echo "true";
+                    error_log("push_data:element_1:send");
                     die();
                 }
             }

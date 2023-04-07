@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `wordsearch`
 --
 
-CREATE TABLE `wq_wordsearch` (
+CREATE TABLE `wordsearch` (
 	  `word` varchar(20) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -36,7 +36,7 @@ CREATE TABLE `wq_wordsearch` (
 -- Dumping data for table `wordsearch`
 --
 
-INSERT INTO `wq_wordsearch` (`word`) VALUES
+INSERT INTO `wordsearch` (`word`) VALUES
 ('ADDRESS'),
 ('ALIAS'),
 ('ALSA'),

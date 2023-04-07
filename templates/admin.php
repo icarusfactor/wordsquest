@@ -2,6 +2,8 @@
 <script type="text/javascript" src="<?php echo plugins_url(); ?>/wordsquest/assets/view.js"></script>
 <script type="text/javascript" src="<?php echo plugins_url(); ?>/wordsquest/assets/tabs.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo plugins_url(); ?>/wordsquest/assets/tabs.css">
+<?php $wqp = new WordsQuestPlugin();  ?>
+
 
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'SETTINGS')">SETTINGS</button>
@@ -23,7 +25,7 @@
                <li id="li_1" >
                 <label class="description" for="element_1">Words</label>                
                 <div>                
-                <textarea id="element_1" name="element_1" class="element textarea small"></textarea> 
+                <textarea id="element_1" name="element_1" class="element textarea small"><?php echo $wqp->pull_words(); ?></textarea> 
                 </div>
                 <p class="guidelines" id="guide_1"><small>Single Spaced Words Separated By One Space Or Newline</small></p> 
                 </li>             
@@ -31,13 +33,11 @@
 
                  <li class="buttons">
                             <input type="hidden" name="form_id" value="111689" />
-                            <input type="hidden" name="if_ajaxid"  value="006">
-                            
+                            <input type="hidden" name="if_ajaxid"  value="006" />
                             <input id="saveForm" class="button_text" type="submit" name="submit" value="SAVE" />
                 </li>
                         </ul>
 </form>
-
 
 </div>
 
@@ -80,7 +80,7 @@ etc.. etc.. etc..<BR/>
 ('TIMESTAMP');<BR/>
 -- Indexes for table `wordsearch`<BR/>
 --<BR/>
-ALTER TABLE `wordsearch`<BR/>
+ALTER TABLE `wq_wordsearch`<BR/>
   ADD PRIMARY KEY (`word`);<BR/>
 COMMIT;<BR/>
 
@@ -91,6 +91,8 @@ COMMIT;<BR/>
 var input_words = document.getElementById("element_1"); 
 
 
+//If options db is empty we will want to try to fill it with the db words,leave empty if not found as its the first time then. 
+
 console.log( '<?php echo addslashes( get_option('wordsquest_configs' ) ); ?>'  );
 
 var wqObj = JSON.parse( '<?php echo addslashes( get_option('wordsquest_configs' ) ); ?>' );
@@ -100,9 +102,8 @@ var wqObjdec = decodeURI( wqObj.words  );
 input_words.value = wqObjdec; 
 
 
-//Start with About in view
-setTab('ABOUTINFO')
-
+  //Start with About in view
+  setTab('ABOUTINFO')
 
 </script> 
 
